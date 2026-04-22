@@ -1,0 +1,14 @@
+type,test,train,val,total
+hydrolase,1375,3810,318,5503
+transferase,1825,2134,1225,5184
+other,131,2739,396,3266
+transcription,298,579,52,929
+lyase,462,306,69,837
+oxidoreductase,182,315,52,549
+transport,83,416,35,534
+ligase,90,313,34,437
+isomerase,64,177,70,311
+chaperone,183,48,66,297
+membrane,71,140,56,267
+viral,53,184,18,255
+metal_containing,21,70,13,104

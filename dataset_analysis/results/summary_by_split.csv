@@ -1,0 +1,5 @@
+new_split,count,avg_protein_len,avg_ligand_heavy_atoms,avg_affinity_value,median_affinity_value,n_covalent
+train,11513,402.1,35.11,6.207,6.17,685
+test,4860,339.8,28.37,6.581,6.77,102
+val,2422,341.6,34.12,6.88,7.06,104
+,648,463.0,22.85,5.38,5.32,2

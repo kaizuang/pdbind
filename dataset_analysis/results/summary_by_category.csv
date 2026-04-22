@@ -1,0 +1,4 @@
+category,count,avg_protein_len,avg_ligand_heavy_atoms,avg_affinity_value,median_affinity_value,n_covalent
+general,14108,394.3,35.38,6.346,6.41,893
+refined,5050,344.5,26.33,6.381,6.41,0
+core,285,369.5,24.55,6.486,6.5,0

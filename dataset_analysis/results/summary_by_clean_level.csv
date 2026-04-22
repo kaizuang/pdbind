@@ -1,0 +1,4 @@
+clean_level,count,avg_protein_len,avg_ligand_heavy_atoms,avg_affinity_value
+CL1,14324,385.0,24.95,6.385
+CL2,7985,379.1,23.52,6.214
+CL3,4404,346.0,23.25,6.314
