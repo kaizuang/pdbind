@@ -1,0 +1,3 @@
+[submodule "LP-PDBBind"]
+	path = LP-PDBBind
+	url = git@github.com:THGLab/LP-PDBBind.git
