@@ -2,7 +2,6 @@
 \IEEEoverridecommandlockouts
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
@@ -14,16 +13,14 @@
 
 \author{
 \IEEEauthorblockN{Kai Zuang}
-\IEEEauthorblockA{\textit{Just a simple guy} \\
-\textit{Cornell University}\\
+\IEEEauthorblockA{\textit{Cornell University}\\
 New York, USA \\
 kz396@cornell.edu}
 \and
 \IEEEauthorblockN{Jiwon Jeong}
-\IEEEauthorblockA{\textit{bioooo} \\
-\textit{Cornell University}\\
+\IEEEauthorblockA{\textit{Cornell University}\\
 New York, USA \\
-jj123@cornell.edu}
+jj835@cornell.edu}
 }
 
 \maketitle
@@ -31,10 +28,6 @@ jj123@cornell.edu}
 \begin{abstract}
 Predicting protein-ligand binding affinity is a central challenge in computational drug discovery, where experimental screening methods such as isothermal titration calorimetry and surface plasmon resonance are accurate but costly and low-throughput. In this work, we propose a graph neural network (GNN) framework that represents both proteins and ligands as molecular graphs and learns to predict binding affinity end-to-end from 3D structural data. Our architecture employs two parallel Graph Attention Network (GAT) encoders to independently embed the protein and ligand graphs, which are then fused via cross-attention and passed to a regression head to produce a scalar affinity estimate. We train and evaluate our model on LP-PDBBind, a leak-proof reorganization of PDBBind v2020 that controls for protein sequence and ligand structural similarity across splits, enabling rigorous generalization assessment to novel molecular structures. We report performance in terms of mean squared error and Pearson correlation on the held-out test set, and compare against standard baselines to assess the benefit of full graph-based molecular representations for binding affinity prediction.
 \end{abstract}
-
-\begin{IEEEkeywords}
-component, formatting, style, styling, insert
-\end{IEEEkeywords}
 
 \section{Introduction}
 Proteins are the dominant targets in modern drug discovery: 1,578 FDA-approved drugs act through 667 human-genome-derived proteins and 189 pathogen-derived proteins \cite{santos2017comprehensive}. In the drug discovery process, binding affinity is a core attribute, as it quantifies how strongly a protein interacts with small molecules, or ligands. Drug-target binding affinity serves as a vital indicator of how well a drug interacts with its target, essential for achieving intended therapeutic outcomes \cite{shaker2021drug}. Binding affinity screening is therefore a standard and critical step in early-stage drug discovery pipelines. To illustrate its role as a filter: the screening attrition rate in current drug discovery protocols suggests that only one marketable drug emerges from approximately one million screened compounds \cite{berdasco2020hts}, and binding affinity is among the primary criteria used to eliminate candidates at this stage. Experimentally, binding affinities are most commonly measured using isothermal titration calorimetry (ITC) and surface plasmon resonance (SPR). ITC follows the heat change when a test compound binds to a target protein, enabling precise measurement of affinity without requiring competing molecules or molecular labels \cite{freyer2008itc}. However, ITC and SPR are lower-throughput techniques \cite{freyer2008itc}, and both methods are costly and difficult to scale for \textit{in silico} and mass drug discovery pipelines. In this project, we aim to use graph data science to predict binding affinities by leveraging graph neural networks, graphical models, and different graph representations for three-dimensional molecular structures. We aim to generalize to unseen structures so that the model can be applied in drug discovery pipelines, where many candidates are novel.
@@ -62,6 +55,25 @@ which outputs the predicted binding affinity $\hat{y} \in \mathbb{R}$ in units o
     \mathcal{L} = \frac{1}{N}\sum_{k=1}^{N}\left(\hat{y}_k - y_k\right)^2
 \end{equation}
 over $N$ training complexes, using the AdamW optimizer with weight decay $\lambda$ and a cosine annealing learning rate schedule.
+
+\section{Analysis and Numerical Results}
+As an initial feasibility check, we characterized the LP-PDBBind splits to confirm that the dataset supports our modeling setup. The cleaned dataset contains 19{,}443 protein-ligand complexes partitioned into train (11{,}513), validation (2{,}422), and test (4{,}860) sets, with the remainder unassigned. Complexes span 13 protein classes dominated by hydrolases (5{,}733) and transferases (5{,}291), confirming broad enzyme-class coverage for the GAT encoders to learn over. Table~\ref{tab:split_stats} summarizes average protein length, ligand heavy-atom count, and binding affinity (reported as $-\log_{10}\mathrm{K_d/K_i}$) per split. Train complexes feature longer proteins (402 residues) than validation/test (341--342), while ligand size is comparable in train and validation ($\sim$34 heavy atoms) but smaller in test (28). Mean binding affinity shifts from 6.21 (train) to 6.58 (test) to 6.88 (validation), indicating the held-out splits are enriched for tighter binders --- a useful stress test for generalization to novel structures.
+
+\begin{table}[htbp]
+\caption{LP-PDBBind dataset statistics by split.}
+\label{tab:split_stats}
+\begin{center}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Split} & \textbf{Count} & \textbf{Avg. prot. len.} & \textbf{Avg. lig. atoms} & \textbf{Avg. affinity} \\
+\hline
+train & 11{,}513 & 402.1 & 35.1 & 6.21 \\
+val   & 2{,}422  & 341.6 & 34.1 & 6.88 \\
+test  & 4{,}860  & 339.8 & 28.4 & 6.58 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
 
 \begin{thebibliography}{00}
 
